@@ -1,4 +1,6 @@
-import React, { useId } from "react";
+"use client";
+import React from "react";
+import { useId } from "react";
 
 type Feature = {
   title: string;
@@ -74,7 +76,6 @@ const grid: Feature[] = [
       "Generate in-depth, downloadable reports with just one click. These reports provide clear insights into your spending patterns, helping you make smarter financial decisions.",
   },
 ];
-
 export const Grid = ({
   pattern,
   size,
@@ -82,24 +83,36 @@ export const Grid = ({
   pattern?: number[][];
   size?: number;
 }) => {
-  const p = pattern ?? [
-    [Math.floor(Math.random() * 4) + 7, Math.floor(Math.random() * 6) + 1],
-    [Math.floor(Math.random() * 4) + 7, Math.floor(Math.random() * 6) + 1],
-    [Math.floor(Math.random() * 4) + 7, Math.floor(Math.random() * 6) + 1],
-    [Math.floor(Math.random() * 4) + 7, Math.floor(Math.random() * 6) + 1],
-    [Math.floor(Math.random() * 4) + 7, Math.floor(Math.random() * 6) + 1],
-  ];
+  // Generate unique coordinates
+  const generateUniquePattern = () => {
+    const coords = new Set<string>();
+    const pattern: number[][] = [];
+
+    while (pattern.length < 5) {
+      const x = Math.floor(Math.random() * 4) + 7;
+      const y = Math.floor(Math.random() * 6) + 1;
+      const coordKey = `${x},${y}`;
+
+      if (!coords.has(coordKey)) {
+        coords.add(coordKey);
+        pattern.push([x, y]);
+      }
+    }
+    return pattern;
+  };
+
+  const p = pattern ?? generateUniquePattern();
 
   return (
-    <div className="pointer-events-none absolute left-1/2 top-0 -ml-20 -mt-2 h-full w-full [mask-image:linear-gradient(white,transparent)]">
-      <div className="absolute inset-0 bg-gradient-to-r [mask-image:radial-gradient(farthest-side_at_top,white,transparent)] dark:from-zinc-900/30 from-zinc-100/30 to-zinc-300/30 dark:to-zinc-900/30 opacity-100">
+    <div className="pointer-events-none absolute left-1/2 top-0  -ml-20 -mt-2 h-full w-full [mask-image:linear-gradient(white,transparent)]">
+      <div className="absolute inset-0 bg-gradient-to-r  [mask-image:radial-gradient(farthest-side_at_top,white,transparent)] dark:from-zinc-900/30 from-zinc-100/30 to-zinc-300/30 dark:to-zinc-900/30 opacity-100">
         <GridPattern
-          width={size}
-          height={size}
+          width={size ?? 20}
+          height={size ?? 20}
           x="-12"
           y="4"
           squares={p}
-          className="absolute inset-0 h-full w-full mix-blend-overlay dark:fill-white/10 dark:stroke-white/10 stroke-black/10 fill-black/10"
+          className="absolute inset-0 h-full w-full  mix-blend-overlay dark:fill-white/10 dark:stroke-white/10 stroke-black/10 fill-black/10"
         />
       </div>
     </div>
@@ -131,10 +144,10 @@ export function GridPattern({ width, height, x, y, squares, ...props }: any) {
       />
       {squares && (
         <svg x={x} y={y} className="overflow-visible">
-          {squares.map(([x, y]: any) => (
+          {squares.map(([x, y]: any, index: number) => (
             <rect
               strokeWidth="0"
-              key={`${x}-${y}`}
+              key={`${x}-${y}-${index}`} // Fixed: Added index to key
               width={width + 1}
               height={height + 1}
               x={x * width}
