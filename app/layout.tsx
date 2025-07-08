@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { IconHome, IconUser, IconMessage } from "@tabler/icons-react";
 import "./globals.css";
 import { FloatingNav } from "@/components/ui/floating-navbar";
+import Footer from "@/components/Landing/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,15 +22,16 @@ const navItems = [
     icon: <IconHome className="h-4 w-4 text-neutral-500 dark:text-white" />,
   },
   {
-    name: "About",
+    name: "Features",
+    link: "/features",
+    icon: <IconMessage className="h-4 w-4 text-neutral-500 dark:text-white" />,
+  },
+  {
+    name: "About Us",
     link: "/about",
     icon: <IconUser className="h-4 w-4 text-neutral-500 dark:text-white" />,
   },
-  {
-    name: "Contact",
-    link: "/contact",
-    icon: <IconMessage className="h-4 w-4 text-neutral-500 dark:text-white" />,
-  },
+  
 ];
 
 export const metadata: Metadata = {
@@ -45,10 +47,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} h-auto overflow-hidden bg-black bg-grid-white/[0.1] relative`}
+        className={`${geistSans.variable} ${geistMono.variable} bg-black bg-grid-white/[0.1] relative`}
       >
         <FloatingNav navItems={navItems} />
         {children}
+        <Footer />
       </body>
     </html>
   );
