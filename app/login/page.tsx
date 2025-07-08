@@ -98,7 +98,7 @@ function page() {
         <div className="flex justify-center items-center gap-2">
           <p className="text-slate-200">Don't have an account ? </p>
           <Link
-            href="/sign-up"
+            href="/signup"
             className="text-violet-600 underline font-semibold"
           >
             Sign Up
