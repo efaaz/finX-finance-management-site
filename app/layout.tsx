@@ -4,6 +4,7 @@ import { IconHome, IconUser, IconMessage } from "@tabler/icons-react";
 import "./globals.css";
 import { FloatingNav } from "@/components/ui/floating-navbar";
 import Footer from "@/components/Landing/Footer";
+import { ThemeProvider } from "@/components/ui/theme-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,7 +32,6 @@ const navItems = [
     link: "/aboutus",
     icon: <IconUser className="h-4 w-4 text-neutral-500 dark:text-white" />,
   },
-  
 ];
 
 export const metadata: Metadata = {
@@ -45,13 +45,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} bg-black bg-grid-white/[0.1] relative`}
       >
-        <FloatingNav navItems={navItems} />
-        {children}
-        <Footer />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <FloatingNav navItems={navItems} />
+          {children}
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );
