@@ -7,6 +7,7 @@ import {
   useMotionValueEvent,
 } from "motion/react";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 export const FloatingNav = ({
   navItems,
@@ -23,7 +24,7 @@ export const FloatingNav = ({
 
   const [visible, setVisible] = useState(true);
 
-   useMotionValueEvent(scrollYProgress, "change", (current) => {
+  useMotionValueEvent(scrollYProgress, "change", (current) => {
     // Check if current is not undefined and is a number
 
     if (typeof current === "number") {
@@ -78,10 +79,12 @@ export const FloatingNav = ({
             <span className="hidden sm:block text-sm">{navItem.name}</span>
           </a>
         ))}
-        <button className="border text-sm font-medium relative border-neutral-200 dark:border-white/[0.2] text-black dark:text-white px-4 py-2 rounded-full">
-          <span>Login</span>
-          <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent  h-px" />
-        </button>
+        <Link href="/login">
+          <button className="border text-sm font-medium relative border-neutral-200 dark:border-white/[0.2] text-black dark:text-white px-4 py-2 rounded-full">
+            <span>Login</span>
+            <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent  h-px" />
+          </button>
+        </Link>
       </motion.div>
     </AnimatePresence>
   );
