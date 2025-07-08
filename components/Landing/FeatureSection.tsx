@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useId } from "react";
 
 type Feature = {
@@ -7,11 +7,11 @@ type Feature = {
   description: string;
 };
 
-export function FeatureSection() {
+export default  function FeatureSection() {
   return (
     <>
-      <div className="sm:px-8 px-6 mt-8 md:mt-20 border-neutral-800">
-        <h4 className="text-3xl lg:text-5xl lg:leading-tight max-w-5xl mx-auto text-center tracking-tight font-medium text-black dark:text-white">
+      <div className="sm:px-8 px-6 h-full mt-8 md:mt-20 border-neutral-800">
+        <h4 className="text-3xl lg:text-5xl lg:leading-tight max-w-5xl mx-auto text-center tracking-tight font-medium text-white">
           Packed with thousands of features
         </h4>
 
@@ -44,7 +44,7 @@ export function FeatureSection() {
   );
 }
 
-const grid: Feature[] = [
+const grid = [
   {
     title: "Real-Time Expense Tracking",
     description:
@@ -83,36 +83,42 @@ export const Grid = ({
   pattern?: number[][];
   size?: number;
 }) => {
-  // Generate unique coordinates
-  const generateUniquePattern = () => {
-    const coords = new Set<string>();
-    const pattern: number[][] = [];
+  // start with whatever the parent passed (could be undefined)
+  const [clientPattern, setClientPattern] = useState<number[][] | null>(
+    pattern ?? null
+  );
 
-    while (pattern.length < 5) {
-      const x = Math.floor(Math.random() * 4) + 7;
-      const y = Math.floor(Math.random() * 6) + 1;
-      const coordKey = `${x},${y}`;
-
-      if (!coords.has(coordKey)) {
-        coords.add(coordKey);
-        pattern.push([x, y]);
+  useEffect(() => {
+    if (!pattern) {
+      // this runs only on the client after hydration
+      const coords = new Set<string>();
+      const randomPattern: number[][] = [];
+      while (randomPattern.length < 5) {
+        const x = Math.floor(Math.random() * 4) + 7;
+        const y = Math.floor(Math.random() * 6) + 1;
+        const key = `${x},${y}`;
+        if (!coords.has(key)) {
+          coords.add(key);
+          randomPattern.push([x, y]);
+        }
       }
+      setClientPattern(randomPattern);
     }
-    return pattern;
-  };
+  }, [pattern]);
 
-  const p = pattern ?? generateUniquePattern();
+  // During SSR (or before effect runs) we render nothing → no mismatch
+  if (!clientPattern) return null;
 
   return (
-    <div className="pointer-events-none absolute left-1/2 top-0  -ml-20 -mt-2 h-full w-full [mask-image:linear-gradient(white,transparent)]">
-      <div className="absolute inset-0 bg-gradient-to-r  [mask-image:radial-gradient(farthest-side_at_top,white,transparent)] dark:from-zinc-900/30 from-zinc-100/30 to-zinc-300/30 dark:to-zinc-900/30 opacity-100">
+    <div className="pointer-events-none absolute left-1/2 top-0 -ml-20 -mt-2 h-full w-full [mask-image:linear-gradient(white,transparent)]">
+      <div className="absolute inset-0 bg-gradient-to-r [mask-image:radial-gradient(farthest-side_at_top,white,transparent)] dark:from-zinc-900/30 from-zinc-100/30 to-zinc-300/30 dark:to-zinc-900/30 opacity-100">
         <GridPattern
           width={size ?? 20}
           height={size ?? 20}
           x="-12"
           y="4"
-          squares={p}
-          className="absolute inset-0 h-full w-full  mix-blend-overlay dark:fill-white/10 dark:stroke-white/10 stroke-black/10 fill-black/10"
+          squares={clientPattern}
+          className="absolute inset-0 h-full w-full mix-blend-overlay dark:fill-white/10 dark:stroke-white/10 stroke-black/10 fill-black/10"
         />
       </div>
     </div>
