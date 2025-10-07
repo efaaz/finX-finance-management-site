@@ -11,9 +11,9 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={` relative`}
+        className={` bg-black`}
       >
         {children}
       </body>

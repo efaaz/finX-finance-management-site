@@ -5,6 +5,7 @@ import "./globals.css";
 import { FloatingNav } from "@/components/ui/floating-navbar";
 import Footer from "@/components/Landing/Footer";
 import { ThemeProvider } from "@/components/ui/theme-provider";
+import Providers from "./providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -49,16 +50,18 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} bg-black bg-grid-white/[0.1] relative`}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <FloatingNav navItems={navItems} />
-          {children}
-          <Footer />
-        </ThemeProvider>
+        <Providers>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <FloatingNav navItems={navItems} />
+            {children}
+            <Footer />
+          </ThemeProvider>
+        </Providers>
       </body>
     </html>
   );

@@ -1,19 +1,29 @@
 "use client";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { useAuthStore } from "@/store/useAuthStore";
 import { Label } from "@radix-ui/react-label";
 import { IconBrandGoogle } from "@tabler/icons-react";
 import React from "react";
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
+
+interface SignUpFormInputs {
+  name: string;
+  email: string;
+  password: string;
+}
 
 function page() {
+  const { signup, loading, error, user } = useAuthStore();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
-  const onSubmit = () => {
-    // dispatch(loginUser(data))
+  } = useForm<SignUpFormInputs>();
+
+  const onSubmit: SubmitHandler<SignUpFormInputs> = async (data) => {
+    await signup(data.name, data.email, data.password);
   };
   return (
     <>
