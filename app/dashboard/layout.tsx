@@ -13,7 +13,6 @@ export default function DashboardLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={` bg-black`}
       >
         {children}
       </body>
