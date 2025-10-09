@@ -8,24 +8,32 @@ import { cn } from "@/lib/utils";
 import { IconBrandGoogle } from "@tabler/icons-react";
 import Link from "next/link";
 import { useAuthStore } from "@/store/useAuthStore";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 interface SignInFormInputs {
   email: string;
   password: string;
 }
 function page() {
   const { signin, loading, error, user, googleLogin } = useAuthStore();
-
+  console.log(user);
+  const router = useRouter();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<SignInFormInputs>();
 
-  const onSubmit: SubmitHandler<SignInFormInputs> = async (data) => {
-    await signin(data.email, data.password);
-  };
-  console.log(user, error);
-  
+const onSubmit: SubmitHandler<SignInFormInputs> = async (data) => {
+  try {
+    await signin(data.email, data.password); // state updates internally
+    toast.success("Login successful.");      // show toast immediately
+    router.push("/dashboard");               // redirect
+  } catch (err) {
+    toast.error("Login failed. Please try again.");
+  }
+};
+
   return (
     <div className="pt-40 w-full">
       <div className="max-w-md items-center w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-white dark:bg-black">
@@ -96,7 +104,7 @@ function page() {
             <button
               className=" relative group/btn flex space-x-2 items-center justify-start px-4 w-full text-black rounded-md h-10 font-medium shadow-input bg-gray-50 dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]"
               type="button"
-                // onClick={() => googleLogin()}
+              // onClick={() => googleLogin()}
             >
               <IconBrandGoogle className="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
               <span className="text-neutral-700 dark:text-neutral-300 text-sm">

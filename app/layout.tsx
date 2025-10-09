@@ -6,6 +6,7 @@ import { FloatingNav } from "@/components/ui/floating-navbar";
 import Footer from "@/components/Landing/Footer";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import Providers from "./providers";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -48,6 +49,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
+      suppressHydrationWarning
         className={`${geistSans.variable} ${geistMono.variable} bg-black bg-grid-white/[0.1] relative`}
       >
         <Providers>
@@ -62,6 +64,7 @@ export default function RootLayout({
             <Footer />
           </ThemeProvider>
         </Providers>
+        <Toaster/>
       </body>
     </html>
   );

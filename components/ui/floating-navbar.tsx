@@ -8,6 +8,7 @@ import {
 } from "motion/react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export const FloatingNav = ({
   navItems,
@@ -47,7 +48,9 @@ export const FloatingNav = ({
       }
     }
   });
-
+   const pathname = usePathname();
+  // Hide navbar on dashboard
+  if (pathname.startsWith("/dashboard")) return null;
   return (
     <AnimatePresence mode="wait">
       <motion.div

@@ -1,3 +1,4 @@
+import ProtectedRoute from "@/components/protectedRoutes";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -11,11 +12,8 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-      >
-        {children}
-      </body>
-    </html>
+    <ProtectedRoute>
+      <section>{children}</section>
+    </ProtectedRoute>
   );
 }
